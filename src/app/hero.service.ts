@@ -36,24 +36,6 @@ export class HeroService {
     );
   }
 
-  private log(message: string): void{
-    this.messageService.add(`HeroService: ${message}`);
-  }
-
-  private handleError<T> (operation = 'operation', result?: T) {
-    return (error: any): Observable<T> => {
-
-      // TODO: send the error to remote logging infrastructure
-      console.error(error); // log to console instead
-  
-      // TODO: better job of transforming error for user consumption
-      this.log(`${operation} failed: ${error.message}`);
-  
-      // Let the app keep running by returning an empty result.
-      return of(result as T);
-    };
-  }
-
   /** PUT: update the hero on the server */
   updateHero (hero: Hero): Observable<any> {
     return this.http.put(this.heroesUrl, hero, httpOptions).pipe(
@@ -91,6 +73,24 @@ export class HeroService {
       tap(_ => this.log(`found heroes matching "${term}"`)),
       catchError(this.handleError<Hero[]>('searchHeroes', []))
     );
+  }
+
+  private log(message: string): void{
+    this.messageService.add(`HeroService: ${message}`);
+  }
+
+  private handleError<T> (operation = 'operation', result?: T) {
+    return (error: any): Observable<T> => {
+
+      // TODO: send the error to remote logging infrastructure
+      console.error(error); // log to console instead
+  
+      // TODO: better job of transforming error for user consumption
+      this.log(`${operation} failed: ${error.message}`);
+  
+      // Let the app keep running by returning an empty result.
+      return of(result as T);
+    };
   }
 
 }
